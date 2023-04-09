@@ -1,6 +1,7 @@
 from pprint import pprint
 
 file = 'resepies.txt'
+people = 3
 
 def creat_cookbook(file):
     with open(file, encoding='utf-8') as f:
@@ -21,6 +22,18 @@ def creat_cookbook(file):
 
         return cookbook
 
-pprint(creat_cookbook(file), sort_dicts=False)
+def get_shop_list_by_dishes(dishes, person_count):
+    cookbook = creat_cookbook(file)
+    shop_list = {}
+    for dish in dishes:
+        ingredients = cookbook[dish]
+        for ingredient in ingredients:
+            ingredient_name, measure, quantity = ingredient['ingredient_name'],\
+                ingredient['measure'], int(ingredient['quantity']) * person_count
+            if ingredient_name in shop_list:
+                shop_list[ingredient_name]['quantity'] += quantity
+            else:
+                shop_list[ingredient_name] = {'measure': measure, 'quantity': quantity}
+    return shop_list
 
-
+pprint(get_shop_list_by_dishes(['Запеченный картофель', 'Фахитос'], 2), sort_dicts=False)
